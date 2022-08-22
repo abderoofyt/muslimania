@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>CRUD</title>
+    </head>
+    <body>
+        <div class="main">
+            <form action="/crud/create">
+                <input type="submit" value="create">
+            </form>
+            {% for data in dataset %}
+            <a href="/crud/list/{{data.id}}">{{data.id}}</a>
+            {{ data.title }}<br/>
+            {{ data.description}}<br/>
+            <hr/>
+            {% endfor %}
+        </div>
+    </body>
+</html>

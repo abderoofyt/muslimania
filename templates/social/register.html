@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>Register</title>
+    </head>
+    <body>
+    <h1 id="register">Register</h1>
+    <p>Please, sign up using the following form:</p>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ user_form.as_p }}
+        <button type="submit" class="save btn btn-default">Create</button>
+    </form>
+    </body>
+</html>
