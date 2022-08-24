@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block search%}
+{% include 'search.html' %}
+{% endblock %}
+
 {% block content %}
 <!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
 <div class="w3-main" style="margin-left:250px">
@@ -12,23 +16,24 @@
     <!-- Right Column -->
     <div class="w3-center">
 
-      <div class="w3-container">
-        <form action="/users/profile_list_view/create">
-          <input type="submit" value="create">
-        </form>
-      <div>
-
-        {% for data in dataset %}
-      <div class="w3-container w3-card w3-white w3-margin-bottom">
-        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
         <div class="w3-container">
-          <h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
-          <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span class="w3-tag w3-teal w3-round">{{ data.sex }}</span></h6>
-          <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
-          <hr>
-        </div>
-      </div>
-      {% endfor %}
+          <form action="/users/profile_list_view/create">
+            <input type="submit" value="create">
+          </form>
+        <div>
+  
+          {% for data in page_obj %}
+          <div class="w3-container w3-card w3-white w3-margin-bottom">
+            <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
+            <div class="w3-container">
+              <h5 class="w3-opacity"><b>Front End Developer / w3schools.com</b></h5>
+              <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>Jan 2015 - <span class="w3-tag w3-teal w3-round">{{ data.sex }}</span></h6>
+              <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur est reprehenderit sunt hic. Nulla tempora soluta ea et odio, unde doloremque repellendus iure, iste.</p>
+              <hr>
+            </div>
+          </div>
+          {% endfor %}
+
 
 
     <!-- End Right Column -->
@@ -43,3 +48,7 @@
 </div>
 
 {% endblock %}
+
+{% block Pagination%}
+{% include 'pagination.html' %}
+{% endblock%}

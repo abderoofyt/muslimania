@@ -3,9 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 from .forms import LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
 from .models import ProfileModel
+from .filters import StoryFilter
 
 @login_required
 def dashboard(request):
@@ -25,8 +27,18 @@ def profile_create_view(request):
     return render(request, "views/profile_create_view.html", context)
 
 def profile_list_view(request):
-    context = { "dataset": ProfileModel.objects.all()}
+    story_list = ProfileModel.objects.order_by('name')
+    story_filter = StoryFilter(request.GET, queryset=story_list)
+
+    paginator = Paginator(story_filter.qs, 2)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = { "page_obj": page_obj, "filter": story_filter}
+
     return render(request, "views/profile_list_view.html", context)
+
 
 def profile_detail_view(request, id):
     context_404 = { "data": get_object_or_404(ProfileModel,id=id)}
