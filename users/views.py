@@ -4,20 +4,61 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 
-from .forms import LoginForm, UserRegitrationForm
-from .models import Profile
+from .forms import LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
+from .models import ProfileModel
 
 @login_required
 def dashboard(request):
     return render(request, 'social/dashboard.html', {'dashboard':'dashboard'})
 
+
+def profile_create_view(request):
+    context = {}
+    form = ProfileCreateForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        try:
+            return redirect('/users/profile_list_view/')
+        except:
+            pass
+    context['form'] = form
+    return render(request, "views/profile_create_view.html", context)
+
 def profile_list_view(request):
-    context = { "dataset": Profile.objects.all()}
+    context = { "dataset": ProfileModel.objects.all()}
     return render(request, "views/profile_list_view.html", context)
 
 def profile_detail_view(request, id):
-    context_404 = { "data": get_object_or_404(Profile,id=id)}
+    context_404 = { "data": get_object_or_404(ProfileModel,id=id)}
     return render(request, "views/profile_detail_view.html", context_404)
+
+
+def profile_update_view(request, id):
+    context = {}
+    obj = get_object_or_404(ProfileModel,id=id)
+    form = ProfileEditForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        try:
+            return redirect('/users/profile_list_view/'+id)
+        except:
+            pass
+    context['form'] = form
+    return render(request, "views/profile_update_view.html", context)
+
+def profile_delete_view(request, id):
+    context = {}
+    obj = get_object_or_404(ProfileModel,id=id)
+    form = ProfileEditForm(request.POST or None, instance=obj)
+    if request.method=="POST":
+        obj.delete()
+        try:
+            return redirect('/users/profile_list_view')
+        except:
+            pass
+    context['form'] = form
+    return render(request, "views/profile_delete_view.html", context)
+
 
 def user_login(request):
     if request.method == "POST":

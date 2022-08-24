@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 
-class Profile(models.Model):
+class ProfileModel(models.Model):
     gender = [('m', 'Male'), ('f','Female')]
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE, null=True, blank=True)
