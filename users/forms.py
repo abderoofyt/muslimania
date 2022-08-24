@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import ProfileModel
+from .models import ProfileModel, LinkModel
 
 class LoginForm(forms.Form):
     username = forms.CharField()
@@ -28,9 +28,14 @@ class UserEditForm(forms.ModelForm):
 class ProfileCreateForm(forms.ModelForm):
     class Meta:
         model = ProfileModel
-        fields = ["name",]
+        fields = [f.name for f in ProfileModel._meta.fields]
 
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = ProfileModel
-        fields = ('number',) 
+        fields = [f.name for f in ProfileModel._meta.fields]
+
+class LinkForm(forms.ModelForm):
+    class Meta:
+        model = LinkModel
+        fields = [f.name for f in LinkModel._meta.fields]

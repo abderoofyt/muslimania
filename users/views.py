@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
-from .forms import LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
+from .forms import LinkForm, LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
 from .models import ProfileModel
 from .filters import StoryFilter
 
@@ -17,14 +17,20 @@ def dashboard(request):
 def profile_create_view(request):
     context = {}
     form = ProfileCreateForm(request.POST or None)
+    form2 = LinkForm(request.POST or None)
     if form.is_valid():
         form.save()
+        form2.save()
         try:
             return redirect('/users/profile_list_view/')
         except:
             pass
-    context['form'] = form
+    context = {
+        'form': form,
+        'form2': form2,
+    }
     return render(request, "views/profile_create_view.html", context)
+
 
 def profile_list_view(request):
     story_list = ProfileModel.objects.order_by('name')
