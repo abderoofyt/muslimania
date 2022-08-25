@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container ">
+<h1>List Of Games</h1>
+
+<h3>Play</h3>
+    <a href="{% url 'quiz' %}">quizz</a></br>
+    <a href="{% url 'hangman' %}">hangman</a>
+
+<h3>Custom Create </h3>
+    <a href="{% url 'addQuestion' %}">quizz</a></br>
+    <a href="#">hangman</a>
+
+
+{% endblock %}

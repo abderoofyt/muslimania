@@ -5,42 +5,20 @@
 {% endblock %}
 
 {% block content %}
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
-<div class="w3-main" style="margin-left:250px">
-
-    <div class="w3-row w3-padding-64">
-      <div class="w3-open w3-container">
-        <!-- Page Container -->
-  <div class="w3-content w3-margin-top" style="max-width:1400px;">
-    
-      <!-- Right Column -->
-      <div class="w3-open w3-center">
   
-        <div class="w3-container w3-card w3-white w3-margin-bottom">
-          <div class="w3-container">
-            <h1 id="update">Update</h1>
-            <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur. </p>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{form.as_p }}
-                    <input type="submit" value="update">
-                    <a href="{% url 'profile_list_view' %}">Cancel</a>
-                </form>
-          </div>
-        </br>
-        </div>
-  
-  
-      <!-- End Right Column -->
-      </div>
-    
-    <!-- End Page Container -->
+<div class="w3-container w3-card w3-white w3-margin-bottom">
+  <div class="w3-container">
+    <h1 id="update">Update</h1>
+    <p>Lorem ipsum dolor sit amet. Praesentium magnam consectetur vel in deserunt aspernatur. </p>
+        <form method="POST">
+            {% csrf_token %}
+            {{form.as_p }}
+            <input type="submit" value="update">
+            <a href="{% url 'profile_list_view' %}">Cancel</a>
+        </form>
   </div>
-      </div>
-    </div>
-
-  <!-- END MAIN -->
-  </div>
+</br>
+</div>
 
 {% endblock %}
 

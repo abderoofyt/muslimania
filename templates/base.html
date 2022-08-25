@@ -29,8 +29,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <a href="{% url 'profile_list_view' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Profiles</a>
     <a href="{% url 'publishers' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Stories</a>
 
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Games</a>
-    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">News</a>   
+    <a href="{% url 'games' %}" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Games</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Info</a>   
     
     {% if user.is_active %}
     <a href="{% url 'logout' %}" class="w3-bar-item w3-button w3-theme-l1 w3-right">Logout! </a>
@@ -57,16 +57,39 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   <a class="w3-bar-item w3-button w3-hover-black" href="{% url 'profile_list_view' %}">Profiles</a>
   <a class="w3-bar-item w3-button w3-hover-black" href="{% url 'publishers' %}">Stories</a>
   <a class="w3-bar-item w3-button w3-hover-black" href="#">Games</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="#">News</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="#">Info</a>
 </nav>
 {% endblock %}
 
 <!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
 
-{% block content %}
-{% endblock %}
+  <div class="w3-row w3-padding-64">
+    <div class="w3-open w3-container">
+      <!-- Page Container -->
+      <div class="w3-content w3-margin-top" style="max-width:1400px;">
+    
+        <!-- Right Column -->
+        <div class="w3-open w3-center">
+
+          {% block content %}
+          {% endblock %}
+
+        <!-- End Right Column -->
+        </div>
+  
+      <!-- End Page Container -->
+      </div>
+    </div>
+  </div>
+
+<!-- END MAIN -->
+</div>
+
+
 
 
 {% block Pagination%}
