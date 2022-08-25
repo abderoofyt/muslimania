@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Book, Author, Publisher
+from .models import BookModel, Author, Publisher
 
-@admin.register(Book)
+@admin.register(BookModel)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = [f.name for f in Book._meta.fields]
+    list_display = ['id','title', 'publisher']
 
 @admin.register(Author)
 class ProfileAdmin(admin.ModelAdmin):

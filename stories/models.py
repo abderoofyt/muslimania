@@ -24,8 +24,15 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-class Book(models.Model):
+
+
+class BookModel(models.Model):
     title = models.CharField(max_length=100)
     authors = models.ManyToManyField('Author')
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     publication_date = models.DateField()
+
+    story = models.TextField()
+
+    def __str__(self):
+        return self.title
