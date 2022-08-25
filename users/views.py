@@ -1,5 +1,8 @@
 # Create your views here.
+from email import message
 from django.http import HttpResponse
+from django.contrib import messages
+
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
@@ -87,11 +90,16 @@ def user_login(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponse('Authenticated successfully')
+                    messages.info(request,'Authenticated successfully')
+                    return redirect('home')
                 else:
-                    return HttpResponse('Disabled account')
+                    messages.info(request,'Disabled account')
+                    return redirect('home')
+
             else:
-                return HttpResponse('Invalid account')
+                messages.info(request,'Invalid account')
+                return redirect('home')
+
     else:
         form = LoginForm()
     return render(request, 'social/login.html', {'form':form})
