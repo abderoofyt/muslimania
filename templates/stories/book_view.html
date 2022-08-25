@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+
+{% block Sidebar%}
+{% endblock %}
+
+{% block content %}
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+    <div class="w3-row w3-padding-64">
+      <div class="w3-open w3-container">
+        <!-- Page Container -->
+  <div class="w3-content w3-margin-top" style="max-width:1400px;">
+    
+      <!-- Right Column -->
+      <div class="w3-open w3-center">
+  
+        <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
+          <div class="w3-container">
+                {% for book in book_list %}
+                <h2>{{ book.id }} : {{book.title }}</h2>
+                    <ul>
+                        <li>{{ book.authors }}</li>
+                        <li>{{ book.publication_date }}</li>
+                </br>
+                    {% endfor %}
+                </ul>
+          </div>
+          <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
+        </div>
+  
+  
+      <!-- End Right Column -->
+      </div>
+    
+    <!-- End Page Container -->
+  </div>
+      </div>
+    </div>
+
+  <!-- END MAIN -->
+  </div>
+
+{% endblock %}
+
+{% block Pagination%}
+{% endblock %}
+
+
