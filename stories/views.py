@@ -1,7 +1,7 @@
 from django.views.generic import ListView, DetailView
 
 from stories.forms import BookCreateForm, PublisherCreateForm
-from .models import Publisher, BookModel, Author
+from .models import Publisher, Book, Author
 
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
@@ -9,11 +9,11 @@ import uuid
 
 class StoriesListView(ListView):
     context_object_name = 'book_list'
-    queryset = BookModel.objects.all()
+    queryset = Book.objects.all()
     template_name = 'stories/stories.html'
 
 class BooksListView(ListView):
-    model = BookModel
+    model = Book
     context_object_name = 'my_favorite_books'
 
     def get_context_data(self, **kwargs):
@@ -31,7 +31,7 @@ class PublisherListView(ListView):
         # Call the base implementation first to get a context
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        context['book_list'] = BookModel.objects.all()
+        context['book_list'] = Book.objects.all()
         return context
 
 class PublisherBookListView(ListView):
@@ -41,7 +41,7 @@ class PublisherBookListView(ListView):
 
     def get_queryset(self):
         self.publisher = get_object_or_404(Publisher, name=self.kwargs['publisher'])
-        return BookModel.objects.filter(publisher=self.publisher)
+        return Book.objects.filter(publisher=self.publisher)
     
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -52,14 +52,14 @@ class PublisherBookListView(ListView):
 
 
 class BookListView(ListView):
-    queryset = BookModel.objects.order_by('-publication_date')
+    queryset = Book.objects.order_by('-publication_date')
     context_object_name = 'book_list'
     
 
 class AcmeBookListView(ListView):
     
     context_object_name = 'book_list'
-    queryset = BookModel.objects.filter(publisher__name='ACME Publishing')
+    queryset = Book.objects.filter(publisher__name='ACME Publishing')
     template_name = 'stories/acme_list.html'
 
 
@@ -69,14 +69,14 @@ class PublisherDetailView(DetailView):
     queryset = Publisher.objects.all()
 
 class BookDetailView(DetailView):
-    model = BookModel
+    model = Book
     template_name = 'stories/book_view.html'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(BookDetailView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
-        context['book_list'] = BookModel.objects.filter(pk=self.kwargs.get('pk'))
+        context['book_list'] = Book.objects.filter(pk=self.kwargs.get('pk'))
         return context
 
 class AuthorDetailView(DetailView):

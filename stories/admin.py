@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import BookModel, Author, Publisher
+from .models import Book, Author, Publisher
 
-@admin.register(BookModel)
+@admin.register(Book)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['id','title', 'publisher']
 
