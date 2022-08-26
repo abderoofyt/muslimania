@@ -10,7 +10,8 @@ from django.core.paginator import Paginator
 
 from .forms import LinkForm, LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
 from .models import ProfileModel
-from .filters import StoryFilter
+from .filters import StoryFilter, BookFilter
+from stories.models import Book
 
 @login_required
 def dashboard(request):
@@ -44,16 +45,20 @@ def profile_list_view(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = { "page_obj": page_obj, "filter": story_filter}
+    context = { "page_obj": page_obj, "filter": story_filter,}
 
     return render(request, "views/profile_list_view.html", context)
 
 
 def profile_detail_view(request, id):
-    context_404 = { "data": get_object_or_404(ProfileModel,id=id)}
+    about = Book.objects.filter(about__in=id)
+    authors = Book.objects.filter(authors__in=id)
+
+    story_filter = BookFilter(request.GET, queryset=Book.objects.all())
+    context_404 = { "data": get_object_or_404(ProfileModel,id=id), "filter": story_filter, "about":about, "authors":authors}
     return render(request, "views/profile_detail_view.html", context_404)
 
-
+       
 def profile_update_view(request, id):
     context = {}
     obj = get_object_or_404(ProfileModel,id=id)

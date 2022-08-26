@@ -2,7 +2,7 @@ from django.shortcuts import redirect,render
 from django.contrib.auth import login,logout,authenticate
 from .forms import *
 from .models import *
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 # Decorator to use built-in authentication system
@@ -32,28 +32,9 @@ logging.basicConfig(format=logger_format)
 logger = logging.getLogger('hangman')
 logger.setLevel(logging.INFO)
 
-dic = []
-
-
-def load_dict():
-    with open("templates/games/hangman/words.txt") as words:
-        for word in words:
-            dic.append(word.strip().lower())
-
-
-def get_word():
-    if len(dic) == 0:
-        load_dict()
-        return get_word()
-    else:
-        random.seed(datetime.now())
-        return choice(dic)
-
-
-@login_required
 def start_game(request):
     if request.method == 'GET':
-        word = get_word()
+        word = str(random.choice(HangmanModel.objects.all())).lower()
         game = Game(user=request.user, answer=word)
         game.save()
         logger.info("starting new game %s for user:" % request.user)
@@ -64,7 +45,6 @@ def start_game(request):
         return button(request)
 
 
-@login_required
 def button(request):
     game_id = int(request.POST['game_id'])
 
@@ -147,7 +127,6 @@ def word_to_display(guessed, answer):
     return display
 
 
-
 # Quiz Game
 def quiz(request):
     if request.method == 'POST':
@@ -192,10 +171,25 @@ def addQuestion(request):
             form=addQuestionform(request.POST)
             if(form.is_valid()):
                 form.save()
-                return redirect('/')
+                next = request.POST.get("next", "/")
+                return HttpResponseRedirect(next)
         context={'form':form}
         return render(request,'games/quiz/add_question.html',context)
     else: 
         return redirect('/users/login/') 
  
 
+@login_required
+def addHangman(request):    
+    if request.user.is_staff:
+        form=addHangmanform()
+        if(request.method=='POST'):
+            form=addHangmanform(request.POST)
+            if(form.is_valid()):
+                form.save()
+                next = request.POST.get("next", "/")
+                return HttpResponseRedirect(next)
+        context={'form':form}
+        return render(request,'games/quiz/add_question.html',context)
+    else: 
+        return redirect('/users/login/') 

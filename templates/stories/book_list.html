@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
 
+{% block search%}
+{% include 'search.html' %}
+{% endblock %}
+
 {% block filters %}
 <div class="w3-section w3-bottombar w3-padding-16">
   <span class="w3-margin-right">Filter:</span> 
   <button class="w3-button w3-black">ALL</button>
-  <button class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Design</button>
-  <button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-  <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>
+  <button class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Books</button>
+  <button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Publishers</button>
+  <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Genre</button>
 </div>
 {% endblock %}
 
@@ -16,27 +20,65 @@
 
 {% block content %}
 <div class="w3-center w3-padding-32">
-  <form action="/stories/book/create/">
+  <form action="create">
     <input class="w3-button" type="submit" value="+">
   </form>
 </div>
-  
+
+
+{% for book in object_list %}
 <div class="w3-container w3-card w3-white w3-margin-bottom">
-  <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
-  <div class="w3-container">
-    <h2>Books</h2>
-      {% for book in object_list %}
-        <ul>
-            
-                <li><a href="#">{{ book.id }} : {{book.title }}</a></li>
-                <li>{{ book.authors }}</li>
-                <li>{{ book.publication_date }}</li>
-        </ul>
-      {% endfor %}
-  </div>
-  <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
-</div>
+<h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal">
+  <a href="{% url 'book-detail' book.id %}"></i>{{ book.title }}</a></h2>
   
+<div class="w3-container">
+  {% if book.subtitle %}
+  <h5 class="w3-opacity"><b>{{ book.subtitle }}</b></h5>
+  {% endif %}
+  {% if book.publication_date %}
+  <h6 class="w3-text-teal"><i class="fa fa-calendar fa-fw w3-margin-right"></i>{{ book.publication_date }} 
+  {% endif %}
+    <span class="w3-tag w3-teal w3-round">{{ data.sex }}</span></h6>
+
+  <p>{{data.biography}}</p>
+  {% for person in book.about.all %}
+                  {% if forloop.first %}
+                    <li> About: {{ person }},
+                  {% elif forloop.last %}
+                      {{ person }}</li>
+                  {% else%}
+                      {{person}},
+                  {% endif %}
+                {% endfor %}
+
+                {% if book.about_who %}
+                <li>{{ book.about_who }}</li>
+                {% endif %}
+
+                {% for person in book.authors.all %}
+                  {% if forloop.first %}
+                    <li> Authors: {{ person }},
+                  {% elif forloop.last %}
+                      {{ person }}</li>
+                  {% else%}
+                      {{person}},
+                  {% endif %}
+                {% endfor %}
+
+                {% if book.writer %}
+                <li>{{ book.writer }}</li>
+                {% endif %}
+
+                {% if book.publishers %}
+                <li>{{ book.publishers }}</li>
+                {% endif %}
+                {% if book.publication_date %}
+                <li>{{ book.publication_date }}</li>
+                {% endif %}
+  <hr>
+</div>
+</div>
+{% endfor %}
 
 {% endblock %}
 

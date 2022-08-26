@@ -34,6 +34,9 @@ class ProfileModel(models.Model):
     def __str__(self):
         return self.name
 
+class bookmode(models.Model):
+    about =  models.ManyToManyField(ProfileModel, blank=True)
+
 
 
 # class family (models.Model):

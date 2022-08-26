@@ -5,12 +5,7 @@ from .models import Publisher, Book, Author
 
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
-import uuid
 
-class StoriesListView(ListView):
-    context_object_name = 'book_list'
-    queryset = Book.objects.all()
-    template_name = 'stories/stories.html'
 
 class BooksListView(ListView):
     model = Book
@@ -96,7 +91,7 @@ def book_create_view(request):
     if form.is_valid():
         form.save()
         try:
-            return redirect('/stories/stories/')
+            return redirect('books')
         except:
             pass
     context = {
@@ -110,7 +105,7 @@ def publisher_create_view(request):
     if form.is_valid():
         form.save()
         try:
-            return redirect('/stories/stories/')
+            return redirect('publishers')
         except:
             pass
     context = {

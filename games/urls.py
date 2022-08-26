@@ -11,4 +11,5 @@ urlpatterns = [
     #Quiz
     path('quiz/', quiz,name='quiz'),
     path('addQuestion/', addQuestion,name='addQuestion'),
+    path('addHangman/', addHangman,name='addHangman'),
     ]

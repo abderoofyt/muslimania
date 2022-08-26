@@ -10,7 +10,7 @@ class addQuestionform(ModelForm):
         model=QuizModel
         fields="__all__"
 
-class addWordform(ModelForm):
+class addHangmanform(ModelForm):
     class Meta:
         model=HangmanModel
         fields="__all__"
