@@ -9,6 +9,11 @@ def home(request):
     context = { "dataset": GeeksModel.objects.all()}
     return render(request, "home.html", context)
 
+def info(request):
+    context = { "dataset": GeeksModel.objects.all()}
+    return render(request, "info.html", context)
+
+
 def profiles(request):
     context = { "dataset": GeeksModel.objects.all()}
     return render(request, "profiles.html", context)

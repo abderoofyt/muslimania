@@ -94,11 +94,11 @@ def user_login(request):
                     return redirect('home')
                 else:
                     messages.info(request,'Disabled account')
-                    return redirect('home')
+                    return redirect('/users/login/')
 
             else:
                 messages.info(request,'Invalid account')
-                return redirect('home')
+                return redirect('/users/login/')
 
     else:
         form = LoginForm()
