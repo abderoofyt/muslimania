@@ -38,7 +38,6 @@ class bookmode(models.Model):
     about =  models.ManyToManyField(ProfileModel, blank=True)
 
 
-
 # class family (models.Model):
 
     # mother = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)

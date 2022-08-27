@@ -16,6 +16,7 @@ class BooksListView(ListView):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['book_list'] = Publisher.objects.all()
+        context['value'] = 'book'
         return context
 
 class PublisherListView(ListView):
@@ -27,6 +28,7 @@ class PublisherListView(ListView):
         context = super().get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['book_list'] = Book.objects.all()
+        context['value'] = 'publisher'
         return context
 
 class PublisherBookListView(ListView):

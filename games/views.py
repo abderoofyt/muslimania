@@ -32,9 +32,14 @@ logging.basicConfig(format=logger_format)
 logger = logging.getLogger('hangman')
 logger.setLevel(logging.INFO)
 
+@login_required
 def start_game(request):
     if request.method == 'GET':
-        word = str(random.choice(HangmanModel.objects.all())).lower()
+        words = HangmanModel.objects.all()
+        if words.exists():
+            word = str(random.choice(words)).lower()
+        else:
+            word = "muslimania"
         game = Game(user=request.user, answer=word)
         game.save()
         logger.info("starting new game %s for user:" % request.user)

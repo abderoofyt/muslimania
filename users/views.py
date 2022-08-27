@@ -1,22 +1,21 @@
 # Create your views here.
-from email import message
-from django.http import HttpResponse
 from django.contrib import messages
-
-from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+
+from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator
+from django.conf import settings
 
 from .forms import LinkForm, LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
 from .models import ProfileModel
 from .filters import StoryFilter, BookFilter
+
 from stories.models import Book
 
 @login_required
 def dashboard(request):
     return render(request, 'social/dashboard.html', {'dashboard':'dashboard'})
-
 
 def profile_create_view(request):
     context = {}
@@ -26,7 +25,7 @@ def profile_create_view(request):
         form.save()
         form2.save()
         try:
-            return redirect('/users/profile_list_view/')
+            return redirect_after_login(request)
         except:
             pass
     context = {
@@ -85,6 +84,12 @@ def profile_delete_view(request, id):
     context['form'] = form
     return render(request, "views/profile_delete_view.html", context)
 
+def redirect_after_login(request):
+    nxt = request.GET.get("next", None)
+    if nxt is None:
+        return redirect(settings.LOGIN_REDIRECT_URL)    
+    else:
+        return redirect(nxt)
 
 def user_login(request):
     if request.method == "POST":
@@ -96,14 +101,14 @@ def user_login(request):
                 if user.is_active:
                     login(request, user)
                     messages.info(request,'Authenticated successfully')
-                    return redirect('home')
+                    return redirect_after_login(request)
                 else:
-                    messages.info(request,'Disabled account')
-                    return redirect('/users/login/')
+                    messages.info(request,'Disabled account')  
+                    return redirect_after_login(request)
 
             else:
                 messages.info(request,'Invalid account')
-                return redirect('/users/login/')
+                return redirect_after_login(request)
 
     else:
         form = LoginForm()
@@ -116,7 +121,7 @@ def register(request):
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
-            return render(request, 'social/registered.html', {'new_user':new_user})
+            return redirect_after_login(request)
     else:
         user_form = UserRegitrationForm()
     return render(request, 'social/register.html', {'user_form':user_form})
