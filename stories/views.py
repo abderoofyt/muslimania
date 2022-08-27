@@ -1,6 +1,6 @@
 from django.views.generic import ListView, DetailView
 
-from stories.forms import BookCreateForm, PublisherCreateForm
+from stories.forms import CreateBookForm, CreatePublisherForm
 from .models import Publisher, Book, Author
 
 from django.shortcuts import get_object_or_404, render, redirect
@@ -89,7 +89,7 @@ class AuthorDetailView(DetailView):
 
 def book_create_view(request):
     context = {}
-    form = BookCreateForm(request.POST or None)
+    form = CreateBookForm(request.POST or None)
     if form.is_valid():
         form.save()
         try:
@@ -103,7 +103,7 @@ def book_create_view(request):
 
 def publisher_create_view(request):
     context = {}
-    form = PublisherCreateForm(request.POST or None)
+    form = CreatePublisherForm(request.POST or None)
     if form.is_valid():
         form.save()
         try:

@@ -7,7 +7,7 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.core.paginator import Paginator
 from django.conf import settings
 
-from .forms import LinkForm, LoginForm, ProfileCreateForm, ProfileEditForm, UserRegitrationForm
+from .forms import LinkForm, LoginForm, CreateProfileForm, EditProfileForm, CreateUserForm
 from .models import ProfileModel
 from .filters import StoryFilter, BookFilter
 
@@ -19,7 +19,7 @@ def dashboard(request):
 
 def profile_create_view(request):
     context = {}
-    form = ProfileCreateForm(request.POST or None)
+    form = CreateProfileForm(request.POST or None)
     form2 = LinkForm(request.POST or None)
     if form.is_valid():
         form.save()
@@ -61,7 +61,7 @@ def profile_detail_view(request, id):
 def profile_update_view(request, id):
     context = {}
     obj = get_object_or_404(ProfileModel,id=id)
-    form = ProfileEditForm(request.POST or None, instance=obj)
+    form = EditProfileForm(request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
         try:
@@ -74,7 +74,7 @@ def profile_update_view(request, id):
 def profile_delete_view(request, id):
     context = {}
     obj = get_object_or_404(ProfileModel,id=id)
-    form = ProfileEditForm(request.POST or None, instance=obj)
+    form = EditProfileForm(request.POST or None, instance=obj)
     if request.method=="POST":
         obj.delete()
         try:
@@ -116,14 +116,14 @@ def user_login(request):
 
 def register(request):
     if request.method == "POST":
-        user_form = UserRegitrationForm(request.POST)
+        user_form = CreateUserForm(request.POST)
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
             new_user.save()
             return redirect_after_login(request)
     else:
-        user_form = UserRegitrationForm()
+        user_form = CreateUserForm()
     return render(request, 'social/register.html', {'user_form':user_form})
 
 

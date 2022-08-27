@@ -10,7 +10,7 @@ urlpatterns = [
     path('books/publishers/<publisher>/', PublisherBookListView.as_view(), name="book_by"),
 
     path('publishers/', PublisherListView.as_view(), name="publishers"),
-    path('publishers/create/', views.publisher_create_view, name="publisher_create_view"),
+    path('publishers/create/', views.publisher_create_view, name="publisher_create"),
    
     path('authors/<int:pk>/', AuthorDetailView.as_view(), name='author-detail'),
     
