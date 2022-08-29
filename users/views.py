@@ -9,13 +9,63 @@ from django.conf import settings
 
 from .forms import LinkForm, LoginForm, CreateProfileForm, EditProfileForm, CreateUserForm
 from .models import ProfileModel
-from .filters import StoryFilter, BookFilter
+from .filters import StoryFilter, BookFilter, AuthorFilter
 
-from stories.models import Book
+from stories.models import Author, Book
 
 @login_required
 def dashboard(request):
     return render(request, 'social/dashboard.html', {'dashboard':'dashboard'})
+
+
+def redirect_after_login(request):
+    nxt = request.GET.get("next", None)
+    if nxt is None:
+        return redirect(settings.LOGIN_REDIRECT_URL)    
+    else:
+        return redirect(nxt)
+
+
+def authors_list(request):
+    story_list = Author.objects.order_by('name')
+    story_filter = AuthorFilter(request.GET, queryset=story_list)
+
+    paginator = Paginator(story_filter.qs, 2)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = { "page_obj": page_obj, "filter": story_filter, "value": "authors"}
+
+    return render(request, "views/profiles.html", context)
+
+def users_list(request):
+    story_list = Author.objects.order_by('name')
+    story_filter = AuthorFilter(request.GET, queryset=story_list)
+
+    paginator = Paginator(story_filter.qs, 2)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = { "page_obj": page_obj, "filter": story_filter, "value": "users"}
+
+    return render(request, "views/profiles.html", context)
+
+def prophets_list(request):
+    story_list = Author.objects.order_by('name')
+    story_filter = AuthorFilter(request.GET, queryset=story_list)
+
+    paginator = Paginator(story_filter.qs, 2)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = { "page_obj": page_obj, "filter": story_filter, "value": "prophets"}
+
+    return render(request, "views/profiles.html", context)
+
+
 
 def profile_create_view(request):
     context = {}
@@ -35,7 +85,7 @@ def profile_create_view(request):
     return render(request, "views/profile_create_view.html", context)
 
 
-def profile_list_view(request):
+def profile_list(request):
     story_list = ProfileModel.objects.order_by('name')
     story_filter = StoryFilter(request.GET, queryset=story_list)
 
@@ -44,17 +94,18 @@ def profile_list_view(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = { "page_obj": page_obj, "filter": story_filter,}
+    context = { "page_obj": page_obj, "filter": story_filter, 'value':'profiles'}
 
-    return render(request, "views/profile_list_view.html", context)
+    return render(request, "views/profiles.html", context)
 
 
 def profile_detail_view(request, id):
     about = Book.objects.filter(about__in=id)
     authors = Book.objects.filter(authors__in=id)
+    
 
     story_filter = BookFilter(request.GET, queryset=Book.objects.all())
-    context_404 = { "data": get_object_or_404(ProfileModel,id=id), "filter": story_filter, "about":about, "authors":authors}
+    context_404 = { "data": get_object_or_404(ProfileModel,id=id), "filter": story_filter, "about":about, "authors":authors, "value": "prophets"}
     return render(request, "views/profile_detail_view.html", context_404)
 
        
@@ -65,7 +116,7 @@ def profile_update_view(request, id):
     if form.is_valid():
         form.save()
         try:
-            return redirect('/users/profile_list_view/'+id)
+            return redirect('/users/profile/'+id)
         except:
             pass
     context['form'] = form
@@ -78,18 +129,11 @@ def profile_delete_view(request, id):
     if request.method=="POST":
         obj.delete()
         try:
-            return redirect('/users/profile_list_view')
+            return redirect('/users/profiles')
         except:
             pass
     context['form'] = form
     return render(request, "views/profile_delete_view.html", context)
-
-def redirect_after_login(request):
-    nxt = request.GET.get("next", None)
-    if nxt is None:
-        return redirect(settings.LOGIN_REDIRECT_URL)    
-    else:
-        return redirect(nxt)
 
 def user_login(request):
     if request.method == "POST":

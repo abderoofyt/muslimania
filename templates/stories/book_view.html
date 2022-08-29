@@ -10,7 +10,8 @@
   <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
   <div class="w3-container">
         {% for book in book_list %}
-        <h2>{{ book.id }} : {{book.title }}</h2>
+        <h2>{{book.title }}</h2>
+        <h4>{{book.subtitle}}</h4>
             <ul>
                 <li>{{ book.authors }}</li>
                 <li>{{ book.publication_date }}</li>
@@ -18,9 +19,34 @@
         </br>
             {% endfor %}
         </ul>
+        <p>{{chapter_list}}
+        {% comment %} {% for item in story_list %}
+          <p>{{item.book}}</p>
+          <p>{{item.story}}</p>
+        {% endfor %} {% endcomment %}
+        {% comment %} <p> {{chapter_list}} </p> {% endcomment %}
   </div>
+
+  <!-- End Right Column -->
+  {% if user.is_active %}
+
+
+  <div class="w3-button">
+    <form action="update">
+        <input type="submit" value="update">
+    </form>
+  </div>
+
+  <div class="w3-button">
+    <form action="delete">
+      <input type="submit" value="delete">
+    </form>
+  </div>
+
   <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal"><a href="/users/profile_list_view/{{data.id}}"></i>{{ data.name }}</a></h2>
 </div>
+{% endif %}
+
 
 {% endblock %}
 

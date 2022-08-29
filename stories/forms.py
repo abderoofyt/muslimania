@@ -1,12 +1,27 @@
 from django import forms
-from .models import Book, Publisher
+from .models import Author, Book, Publisher, Story
 
 class CreateBookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = [f.name for f in Book._meta.fields]
+        fields = '__all__'
 
 class CreatePublisherForm(forms.ModelForm):
     class Meta:
         model = Publisher
-        fields = [f.name for f in Publisher._meta.fields]
+        fields = '__all__'
+
+class CreateChapterForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = '__all__'
+
+class AuthorCreateForm(forms.ModelForm):
+    class Meta:
+        model = Author
+        fields = '__all__'
+
+class EditBookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = '__all__'
