@@ -18,8 +18,6 @@ urlpatterns = [
     path('books/<id>/chapter_update/', views.story_update, name="chapter_update"),
     path('books/<id>/chapter_delete/', views.story_delete, name="chapter_delete"),
 
-
-    path('books/chapters_create/', views.chapter_create, name="chapters_create"),
     
     path('books/publishers/<publisher>/', PublisherBookListView.as_view(), name="book_by"),
 

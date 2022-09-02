@@ -54,21 +54,11 @@ class Story(models.Model):
     def __str__(self):
         return self.chapter_name
 
-class Chapter(models.Model):
-    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True)
-    chapter_no = models.IntegerField(blank=True, null=True)
-    chapter_name = models.CharField(blank=True, null=True, max_length=100)
-    text = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.chapter_name
-
 class Tag(models.Model):
     name = models.CharField(max_length=40)
 
     def __str__(self):
         return self.name
-
 
 class Post(models.Model):
     title = models.CharField(max_length=200, db_index=True)

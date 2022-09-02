@@ -1,5 +1,5 @@
 from django import forms
-from .models import Author, Book, Chapter, Publisher, Story, Comment
+from .models import Author, Book, Publisher, Story, Comment
 
 class StoryForm(forms.ModelForm):
     class Meta:
@@ -24,11 +24,6 @@ class CreatePublisherForm(forms.ModelForm):
 class CreateChapterForm(forms.ModelForm):
     class Meta:
         model = Story
-        fields = '__all__'
-
-class ChapterCreateForm(forms.ModelForm):
-    class Meta:
-        model = Chapter
         fields = '__all__'
 
 class AuthorCreateForm(forms.ModelForm):

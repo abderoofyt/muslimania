@@ -1,7 +1,7 @@
 from http.client import HTTPResponse
 from django.views.generic import ListView, DetailView
 
-from stories.forms import AuthorCreateForm, EditStoryForm, CreateBookForm, ChapterCreateForm, CreateChapterForm, CreatePublisherForm, EditBookForm, StoryForm
+from stories.forms import AuthorCreateForm, EditStoryForm, CreateBookForm, CreateChapterForm, CreatePublisherForm, EditBookForm, StoryForm
 from .models import Publisher, Book, Author, Story
 from .forms import Comment, CommentForm
 
