@@ -1,9 +1,9 @@
 from http.client import HTTPResponse
-import re
 from django.views.generic import ListView, DetailView
 
-from stories.forms import AuthorCreateForm, CreateBookForm, CreateChapterForm, CreatePublisherForm, EditBookForm
+from stories.forms import AuthorCreateForm, EditStoryForm, CreateBookForm, ChapterCreateForm, CreateChapterForm, CreatePublisherForm, EditBookForm, StoryForm
 from .models import Publisher, Book, Author, Story
+from .forms import Comment, CommentForm
 
 from django.shortcuts import get_object_or_404, render, redirect
 from django.utils import timezone
@@ -79,6 +79,51 @@ class BookDetailView(DetailView):
         context['book_list'] = Book.objects.filter(pk=self.kwargs.get('pk'))
         return context
 
+class BookView(DetailView):
+    model = Book
+    template_name = 'stories/book_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pk = self.kwargs["pk"]
+        slug = self.kwargs["slug"]
+
+        form = CommentForm()
+        post = get_object_or_404(Book, pk=pk, slug=slug)
+        comments = Story.comment_set.all()
+
+        context['post'] = post
+        context['comments'] = comments
+        context['form'] = form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = CommentForm(request.POST)
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+
+        post = Book.objects.filter(id=self.kwargs['pk'])[0]
+        comments = post.comment_set.all()
+
+        context['post'] = post
+        context['comments'] = comments
+        context['form'] = form
+
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            content = form.cleaned_data['content']
+
+            comment = Comment.objects.create(
+                name=name, email=email, content=content, post=post
+            )
+
+            form = CommentForm()
+            context['form'] = form
+            return self.render_to_response(context=context)
+
+        return self.render_to_response(context=context)
+
 class AuthorDetailView(DetailView):
     
     queryset = Author.objects.all()
@@ -133,6 +178,46 @@ def story_create(request):
     }
     return render(request, "views/profile_create_view.html", context)
 
+def story_update(request, id):
+    context = {}
+    obj = get_object_or_404(Book,id=id)
+    form = EditStoryForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        try:
+            return redirect('books')
+        except:
+            pass
+    context['form'] = form
+    return render(request, "views/profile_update_view.html", context)
+
+def story_delete(request, id):
+    context = {}
+    obj = get_object_or_404(Book,id=id)
+    form = EditStoryForm(request.POST or None, instance=obj)
+    if request.method=="POST":
+        obj.delete()
+        try:
+            return redirect('books')
+        except:
+            pass
+    context['form'] = form
+    return render(request, "views/profile_delete_view.html", context)
+
+
+def chapter_create(request):
+    context = {}
+    form = ChapterCreateForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        try:
+            return redirect('books')
+        except:
+            pass
+    context = {
+        'form': form,
+    }
+    return render(request, "views/profile_create_view.html", context)
 
 def book_update(request, id):
     context = {}
@@ -159,7 +244,6 @@ def book_delete(request, id):
             pass
     context['form'] = form
     return render(request, "views/profile_delete_view.html", context)
-
 
 
 
